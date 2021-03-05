@@ -21,7 +21,7 @@ def get_linear_timestamp(goose_t):
     return delta.days * (24 * 3600) + delta.seconds + delta.microseconds / 1000000.0
 
 dataset = []
-dmp = pyshark.FileCapture('AS1.pcapng')
+dmp = pyshark.FileCapture('goose.pcapng')
 #print(dmp)
 first_tm = None
 
