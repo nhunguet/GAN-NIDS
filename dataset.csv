@@ -1,0 +1,4 @@
+distination,Source,Type,VLAN priority,appid,lengh,path,state,seq,data_cnt
+01:0c:cd:01:00:01,08:00:27:20:db:2d,33024,4,1000,187,simpleIOGenericIO/LLN0$AnalogValues,1,0,4
+01:0c:cd:01:00:01,08:00:27:20:db:2d,33024,4,1000,187,simpleIOGenericIO/LLN0$AnalogValues,1,1,4
+01:0c:cd:01:00:01,08:00:27:20:db:2d,33024,4,1000,187,simpleIOGenericIO/LLN0$AnalogValues,1,2,4
