@@ -30,7 +30,7 @@ for pkt in dmp:
         tm = get_linear_timestamp(pkt.goose.t)
         dataset.append( {
 		
-            'destination': pkt['destination'].dst, 0
+            'destination': pkt['ETH'].dst, 0
             'appid': int(pkt.goose.appid, 0),
             'len': int(pkt.goose.length, 0),
             'path': str(pkt.goose.datSet),
