@@ -11,25 +11,27 @@ def get_timestamp(goose_t):
     hour = int(goose_t[13:15])
     min = int(goose_t[16:18])
     sec = float(goose_t[19:].split(' UTC')[0])
-    return (year, month, day, hour, min, sec)
+    return year, month, day, hour, min, sec
 
 dataset = []
-dmp = pyshark.FileCapture('GOOSE.pcapng')
-
-first_tm = None
+dmp = pyshark.FileCapture('goose_IDS_2.pcapng')
 
 for pkt in dmp:
+    
     if pkt.highest_layer == 'GOOSE':
-        tm = get_linear_timestamp(pkt.goose.t)
+        tm = get_timestamp(pkt.goose.t)
         dataset.append( {
-		
-            'destination': pkt['ETH'].dst, 0
-            'appid': int(pkt.goose.appid, 0),
-            'len': int(pkt.goose.length, 0),
-            'path': str(pkt.goose.datSet),
-            't': tm,
-            'state': int(pkt.goose.stNum),
-            'seq': int(pkt.goose.sqNum),
-            'data_cnt': int(pkt.goose.numDatSetEntries)
+	    'Distination': pkt['ETH'].dst,
+            'Goose_pkt_identifi': int(pkt.goose.appid, 0),
+            'Goose_pkt_length': int(pkt.goose.length, 0),
+            'Goose_pkt_datSet': pkt.goose.datSet,
+	    'Goose_pkt_TimeAllowTolive': pkt.goose.timeAllowedtoLive,
+            'Goose_pkt_time': tm,
+            'Goose_pkt_stNum': int(pkt.goose.stNum),
+            'Goose_pkt_sqNum': int(pkt.goose.sqNum),
+	    'Goose_pkt_Data_bit_string': int(pkt.goose.Data),
+	    'Goose_pkt_data_cnt': int(pkt.goose.numDatSetEntries),
+	    'Goose_pkt_test': int(pkt.goose.test)	 	
         } )
-pd.DataFrame(dataset, columns=['destination','appid', 'len', 'path', 't', 'state', 'seq', 'data_cnt']).to_csv('dataset.csv', index=False)
+
+pd.DataFrame(dataset, columns=['Distination', 'Goose_pkt_identifi', 'Goose_pkt_length', 'Goose_pkt_datSet', 'Goose_pkt_time', 'Goose_pkt_TimeAllowTolive', 'Goose_pkt_stNum', 'Goose_pkt_sqNum','Goose_pkt_Data_bit_string','Goose_pkt_data_cnt','Goose_pkt_test']).to_csv('dataset0_final.csv', index=False)
