@@ -13,13 +13,6 @@ def get_timestamp(goose_t):
     sec = float(goose_t[19:].split(' UTC')[0])
     return (year, month, day, hour, min, sec)
 
-def get_linear_timestamp(goose_t):
-    tm = get_timestamp(goose_t)
-    dst = datetime.datetime(tm[0], tm[1], tm[2], tm[3], tm[4], int(math.floor(tm[5])), int((tm[5] - math.floor(tm[5])) * 1000000), tzinfo=datetime.timezone.utc)
-    src = datetime.datetime(1990, 1, 1, 0, 0, 0, 0, tzinfo=datetime.timezone.utc)
-    delta = dst - src
-    return delta.days * (24 * 3600) + delta.seconds + delta.microseconds / 1000000.0
-
 dataset = []
 dmp = pyshark.FileCapture('GOOSE.pcapng')
 
@@ -34,12 +27,9 @@ for pkt in dmp:
             'appid': int(pkt.goose.appid, 0),
             'len': int(pkt.goose.length, 0),
             'path': str(pkt.goose.datSet),
-            't': 0 if first_tm == None else tm - first_tm,
+            't': tm,
             'state': int(pkt.goose.stNum),
             'seq': int(pkt.goose.sqNum),
             'data_cnt': int(pkt.goose.numDatSetEntries)
         } )
-        if first_tm == None:
-            first_tm = tm
-
 pd.DataFrame(dataset, columns=['destination','appid', 'len', 'path', 't', 'state', 'seq', 'data_cnt']).to_csv('dataset.csv', index=False)
